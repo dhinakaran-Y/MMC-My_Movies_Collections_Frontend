@@ -103,6 +103,26 @@ export default function LoginDiv() {
       console.log("🔵 [Login] Cookies after login:", document.cookie);
 
       if (res.ok) {
+        // FALLBACK: If cookie wasn't set by backend, set it manually from response
+        const tokenCookie = document.cookie
+          .split(";")
+          .find((c) => c.trim().startsWith("token="));
+
+        if (!tokenCookie && result.token) {
+          console.log(
+            "⚠️ [Login] Cookie not set by server, setting manually...",
+          );
+          // Set cookie with 1-hour expiration (matching backend)
+          // Note: JavaScript can't set SameSite=None; server must do that
+          const expirationDate = new Date();
+          expirationDate.setTime(expirationDate.getTime() + 60 * 60 * 1000);
+          const expires = expirationDate.toUTCString();
+          document.cookie = `token=${result.token}; path=/; expires=${expires}`;
+          console.log("✅ [Login] Cookie set manually (frontend fallback)");
+        } else if (tokenCookie) {
+          console.log("✅ [Login] Cookie already set by server");
+        }
+
         console.log("✅ [Login] Success! Calling auth context login()...");
         await login();
         console.log("✅ [Login] Redirecting to home...");
