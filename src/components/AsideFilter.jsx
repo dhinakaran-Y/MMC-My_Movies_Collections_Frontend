@@ -67,7 +67,7 @@ export default function AsideFilter({
   const selectedGenres = searchParams.get("genre")?.split(",") || [];
 
   return (
-    <aside className="col-span-3 bg-dark-body2 p-5 pt-10 flex flex-col space-y-8 h-full border-r border-white/5">
+    <aside className="col-span-full lg:col-span-3 bg-dark-body2 p-5 pt-10 flex flex-col space-y-8 lg:h-full border-r border-white/5">
       <div className="flex justify-between px-3 items-baseline">
         <span className="text-sm font-semibold text-white/80 uppercase tracking-wider">
           Filters

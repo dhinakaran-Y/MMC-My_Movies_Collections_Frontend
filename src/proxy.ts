@@ -54,7 +54,7 @@ async function getCollectionVisibility(collectionId) {
   }
 }
 
-export async function middleware(request) {
+export async function proxy(request) {
   console.log("🔴🔴🔴 MIDDLEWARE FUNCTION CALLED 🔴🔴🔴");
   const token = request.cookies.get("token")?.value;
   const pathname = request.nextUrl.pathname;

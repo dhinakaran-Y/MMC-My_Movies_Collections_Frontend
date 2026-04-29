@@ -37,7 +37,7 @@ export default function HomeGrid({ movieArr, currentPage, displayTotalPages }) {
   };
 
   return (
-    <main className="col-span-9 h-full overflow-y-auto p-8 custom-scrollbar">
+    <main className="col-span-full lg:col-span-9 lg:h-full lg:overflow-y-auto p-8 custom-scrollbar">
       {/* Example: A button inside your grid to create a collection */}
       {/* <button
         onClick={() => openModal(null, handleCollectionSubmit)}
