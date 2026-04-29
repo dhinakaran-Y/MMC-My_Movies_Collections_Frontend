@@ -85,6 +85,9 @@ export default function LoginDiv() {
     setServerError("");
 
     try {
+      console.log("🔵 [Login] Submitting login request...");
+      console.log("🔵 [Login] Cookies before login:", document.cookie);
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,16 +95,24 @@ export default function LoginDiv() {
         body: JSON.stringify({ email: data.email, password: data.password }),
       });
 
+      console.log("🔵 [Login] Response status:", res.status);
+      console.log("🔵 [Login] Response headers:", res.headers);
+
       const result = await res.json();
+      console.log("🔵 [Login] Response body:", result);
+      console.log("🔵 [Login] Cookies after login:", document.cookie);
 
       if (res.ok) {
+        console.log("✅ [Login] Success! Calling auth context login()...");
         await login();
+        console.log("✅ [Login] Redirecting to home...");
         router.push("/");
       } else {
         setServerError(result.error || "Login failed. Please try again.");
+        console.error("🔴 [Login] Error:", result.error);
       }
     } catch (error) {
-      console.error("Login Error:", error.message);
+      console.error("🔴 [Login] Error:", error.message);
       setServerError(
         "Unable to connect to the server. Please try again later.",
       );
