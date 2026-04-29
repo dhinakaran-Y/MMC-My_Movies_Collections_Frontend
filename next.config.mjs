@@ -40,16 +40,16 @@ const nextConfig = {
   //     },
   //   ];
   // },
-  // async rewrites() {
-  //   return {
-  //     afterFiles: [
-  //       {
-  //         source: "/api/:path*",
-  //         destination: `${proxyUrl}/:path*`, // Proxy to Backend
-  //       },
-  //     ],
-  //   };
-  // },
+  async rewrites() {
+    return {
+      afterFiles: [
+        {
+          source: "/api/:path*",
+          destination: `https://mmc-my-movies-collection.onrender.com/:path*`, // Proxy to Backend
+        },
+      ],
+    };
+  },
 
   
 };
