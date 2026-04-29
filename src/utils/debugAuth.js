@@ -16,7 +16,7 @@ export async function debugAuthFlow() {
   console.log("   Token cookie:", tokenCookie ? "✅ FOUND" : "❌ MISSING");
 
   // 2. Check API URL
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = "/api";
   console.log("2️⃣ API URL:", apiUrl);
   console.log("   Is HTTPS:", apiUrl?.includes("https") ? "✅ Yes" : "❌ No");
   console.log(
@@ -27,7 +27,7 @@ export async function debugAuthFlow() {
   // 3. Test fetch with credentials
   console.log("\n3️⃣ Testing fetch to /me endpoint...");
   try {
-    const response = await fetch(`${apiUrl}/me`, {
+    const response = await fetch(`/api/me`, {
       method: "GET",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

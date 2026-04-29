@@ -56,10 +56,10 @@ async function fetchProviders(movieId) {
 async function fetchUserData(userId) {
   try {
     const [colRes, watchRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-collections/${userId}`, {
+      fetch(`/api/get-collections/${userId}`, {
         credentials: "include",
       }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/watch-list/${userId}`, { credentials: "include" }),
+      fetch(`/api/watch-list/${userId}`, { credentials: "include" }),
     ]);
     return {
       collections: colRes.ok ? (await colRes.json()).collections || [] : [],
@@ -127,7 +127,7 @@ export default function MovieCard({ movie }) {
 
   const handleCollectionSubmit = async (formData) => {
     if (!user?._id) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collection`, {
+    const res = await fetch(`/api/collection`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -143,9 +143,7 @@ export default function MovieCard({ movie }) {
   const handleToggleWatched = async () => {
     if (!user?._id) return;
     const isWatched = state.watchedList.includes(movie.id.toString());
-    const endpoint = isWatched
-      ? `${process.env.NEXT_PUBLIC_API_URL}/remove-watched`
-      : `${process.env.NEXT_PUBLIC_API_URL}/add-watched`;
+    const endpoint = isWatched ? `/api/remove-watched` : `/api/add-watched`;
     await fetch(endpoint, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -157,9 +155,7 @@ export default function MovieCard({ movie }) {
 
   const handleToggleCollection = async (collection) => {
     const isAdded = collection.moviesList?.includes(movie.id.toString());
-    const endpoint = isAdded
-      ? `${process.env.NEXT_PUBLIC_API_URL}/remove-movie`
-      : `${process.env.NEXT_PUBLIC_API_URL}/add-movie`;
+    const endpoint = isAdded ? `/api/remove-movie` : `/api/add-movie`;
     if (isAdded && !confirm("Are you ok to remove the movie?")) return;
     await fetch(endpoint, {
       method: "PATCH",

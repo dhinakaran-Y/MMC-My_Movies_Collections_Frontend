@@ -88,7 +88,7 @@ export default function LoginDiv() {
       console.log("🔵 [Login] Submitting login request...");
       console.log("🔵 [Login] Cookies before login:", document.cookie);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      const res = await fetch(`/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

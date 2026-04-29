@@ -1,21 +1,34 @@
 import Link from "next/link";
 import SingleCollectionPageGrid from "./SingleCollectionPageGrid";
 import ShareButton from "@/components/CollectionComponents/ShareBtn";
+import { cookies } from "next/headers";
+
+const APP_BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
+  "http://localhost:3000";
 
 export async function generateMetadata({ params }) {
   const { collectionId } = await params;
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/collection/${collectionId}`,
-    { cache: "no-store" },
-  );
-  const data = await res.json();
-  const name = data.data?.collectionName || "Collection";
+  try {
+    const res = await fetch(
+      new URL(`/api/collection/${collectionId}`, APP_BASE_URL).toString(),
+      { cache: "no-store" },
+    );
 
-  return {
-    title: `${name} | MovieCollection`,
-    description: `Browse the ${name} movie collection.`,
-  };
+    if (!res.ok) return { title: "Collection | MovieCollection" };
+
+    const data = await res.json();
+    const name = data.data?.collectionName || "Collection";
+
+    return {
+      title: `${name} | MovieCollection`,
+      description: `Browse the ${name} movie collection.`,
+    };
+  } catch {
+    return { title: "Collection | MovieCollection" };
+  }
 }
 
 async function getMovieDetails(movieId) {
@@ -27,26 +40,52 @@ async function getMovieDetails(movieId) {
   return res.json();
 }
 
+// ── Extracted fetcher — no JSX, just data ──────────────────────────────────
+async function getCollectionData(collectionId, cookieString) {
+  try {
+    const colRes = await fetch(
+      new URL(`/api/collection/${collectionId}`, APP_BASE_URL).toString(),
+      {
+        method: "GET",
+        cache: "no-store",
+        headers: { Cookie: cookieString },
+      },
+    );
+
+    if (!colRes.ok) return { error: colRes.status };
+
+    const colData = await colRes.json();
+    return { data: colData.data };
+  } catch {
+    return { error: 500 };
+  }
+}
+
 export default async function SingleCollectionPage({ params }) {
   const { collectionId } = await params;
 
-  const colRes = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/collection/${collectionId}`,
-    { cache: "no-store" },
+  const cookieStore = await cookies();
+  const cookieString = cookieStore.toString();
+
+  // ── All data fetching done outside JSX ─────────────────────────────────
+  const { data: collection, error } = await getCollectionData(
+    collectionId,
+    cookieString,
   );
 
-  if (!colRes.ok) {
+  // ── Error state — JSX safely outside try/catch ─────────────────────────
+  if (error) {
     return (
       <section className="min-h-screen flex items-center justify-center">
-        <p className="text-white text-xl">Collection not found.</p>
+        <p className="text-white text-xl">
+          {error === 401
+            ? "Please log in to view this."
+            : "Collection not found."}
+        </p>
       </section>
     );
   }
 
-  const colData = await colRes.json();
-  const collection = colData.data;
-
-  // Fetch all movie details in parallel, filter out any failed fetches
   const moviesList =
     collection.moviesList?.length > 0
       ? (await Promise.all(collection.moviesList.map(getMovieDetails))).filter(
@@ -56,7 +95,6 @@ export default async function SingleCollectionPage({ params }) {
 
   return (
     <section className="max-w-7xl flex-col mx-auto px-6 py-16 min-h-screen">
-      {/* Share button — only for public collections */}
       {collection.visibility === "public" && (
         <div className="float-end">
           <ShareButton

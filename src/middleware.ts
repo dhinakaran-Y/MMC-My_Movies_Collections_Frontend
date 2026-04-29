@@ -39,10 +39,9 @@ async function verifyToken(token) {
 
 async function getCollectionVisibility(collectionId) {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/collection/${collectionId}`,
-      { cache: "no-store" },
-    );
+    const res = await fetch(`/api/collection/${collectionId}`, {
+      cache: "no-store",
+    });
     if (!res.ok) return null;
     const data = await res.json();
     return {

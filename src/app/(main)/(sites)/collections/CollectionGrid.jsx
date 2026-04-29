@@ -28,7 +28,7 @@ export default function CollectionGrid() {
     if (!user?._id) return;
     try {
       setLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-collections/${user._id}`, {
+      const res = await fetch(`/api/get-collections/${user._id}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -46,7 +46,7 @@ export default function CollectionGrid() {
   const fetchWatchList = async () => {
     if (!user?._id) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/watch-list/${user._id}`, {
+      const res = await fetch(`/api/watch-list/${user._id}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -68,8 +68,8 @@ export default function CollectionGrid() {
   // 3. Create / Update Handler
   const handleCollectionSubmit = async (data) => {
     const endpoint = editingData
-      ? `${process.env.NEXT_PUBLIC_API_URL}/collection/${editingData._id}`
-      : `${process.env.NEXT_PUBLIC_API_URL}/collection`;
+      ? `/api/collection/${editingData._id}`
+      : `/api/collection`;
     const method = editingData ? "PATCH" : "POST";
 
     const res = await fetch(endpoint, {
@@ -93,7 +93,7 @@ export default function CollectionGrid() {
   // 4. Delete Handler
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this collection?")) return;
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collection/${id}`, {
+    await fetch(`/api/collection/${id}`, {
       method: "DELETE",
       credentials: "include",
     });

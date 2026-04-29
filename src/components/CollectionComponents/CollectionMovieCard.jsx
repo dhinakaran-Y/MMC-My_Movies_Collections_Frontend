@@ -34,8 +34,8 @@ async function fetchMovieData(userId, movieId) {
     fetch(
       `https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${API_KEY}`,
     ),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-collections/${userId}`, { credentials: "include" }),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/watch-list/${userId}`, { credentials: "include" }),
+    fetch(`/api/get-collections/${userId}`, { credentials: "include" }),
+    fetch(`/api/watch-list/${userId}`, { credentials: "include" }),
   ]);
 
   return {
@@ -108,7 +108,7 @@ export default function CollectionMovieCard({ movie, collectionId }) {
   // Create new collection (passed to modal)
   const handleCollectionSubmit = async (formData) => {
     if (!user?._id) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collection`, {
+    const res = await fetch(`/api/collection`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -125,9 +125,7 @@ export default function CollectionMovieCard({ movie, collectionId }) {
     if (!user?._id) return;
     const movieIdStr = movie.id.toString();
     const isWatched = state.watchedList.includes(movieIdStr);
-    const endpoint = isWatched
-      ? `${process.env.NEXT_PUBLIC_API_URL}/remove-watched`
-      : `${process.env.NEXT_PUBLIC_API_URL}/add-watched`;
+    const endpoint = isWatched ? `/api/remove-watched` : `/api/add-watched`;
 
     const res = await fetch(endpoint, {
       method: "PATCH",
@@ -141,9 +139,7 @@ export default function CollectionMovieCard({ movie, collectionId }) {
   const handleToggleCollection = async (collection) => {
     const movieIdStr = movie.id.toString();
     const isAdded = collection.moviesList?.includes(movieIdStr);
-    const endpoint = isAdded
-      ? `${process.env.NEXT_PUBLIC_API_URL}/remove-movie`
-      : `${process.env.NEXT_PUBLIC_API_URL}/add-movie`;
+    const endpoint = isAdded ? `/api/remove-movie` : `/api/add-movie`;
 
     if (isAdded && !confirm("Are you ok to remove the movie?")) return;
 

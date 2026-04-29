@@ -17,7 +17,7 @@ export default function HomeGrid({ movieArr, currentPage, displayTotalPages }) {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collection`, {
+      const response = await fetch(`/api/collection`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
