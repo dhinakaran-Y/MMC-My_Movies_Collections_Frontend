@@ -168,7 +168,7 @@ export default function MovieCard({ movie }) {
   return (
     <div className="group relative flex flex-col bg-dark-body2 rounded-xl overflow-hidden border border-white/5 shadow-lg">
       {/* Image Container */}
-      <div className="relative w-full aspect-2/3 max-sm:h-100">
+      <div className="relative w-full aspect-2/3 h-90 sm:h-100 md:h-110 lg:h-120 overflow-hidden">
         <Image
           src={posterSrc}
           alt={movie.title}
