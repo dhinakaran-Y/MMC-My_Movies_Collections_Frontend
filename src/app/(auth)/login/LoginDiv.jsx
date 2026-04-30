@@ -177,6 +177,7 @@ export default function LoginDiv() {
           <input
             id="email"
             type="email"
+            autoFocus
             placeholder="name@example.com"
             className={`w-full px-4 py-3 rounded-xl border bg-dark-body1 text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all placeholder:text-white/20 ${
               errors.email ? "border-red-500/60" : "border-white/20"

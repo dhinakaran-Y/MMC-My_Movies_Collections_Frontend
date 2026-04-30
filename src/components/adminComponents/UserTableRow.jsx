@@ -53,6 +53,7 @@ export default function UserTableRow({
                 setFormData({ ...formData, name: e.target.value })
               }
               placeholder="Name"
+              autoFocus
             />
             <input
               className="bg-white/5 p-2 rounded text-xs text-white"

@@ -252,6 +252,7 @@ export default function MovieCard({ movie }) {
                             : "text-white"
                         }`}>
                         {col.collectionName}
+                        {isAdded && <span className="float-right">✓</span>}
                       </button>
                     );
                   })}

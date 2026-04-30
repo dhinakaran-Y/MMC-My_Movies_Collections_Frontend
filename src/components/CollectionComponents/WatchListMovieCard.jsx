@@ -148,7 +148,7 @@ export default function WatchListMovieCard({ movie }) {
   return (
     <div className="group relative flex flex-col bg-dark-body2 rounded-xl overflow-hidden border border-white/5 shadow-lg">
       {/* Image Container */}
-      <div className="relative w-full aspect-[2/3]">
+      <div className="relative w-full aspect-2/3">
         <Image
           src={poster}
           alt={movie.title}

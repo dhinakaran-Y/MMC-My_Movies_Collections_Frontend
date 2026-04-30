@@ -139,6 +139,7 @@ export default function CollectionGrid() {
             <h1 className="text-slate-400 group-hover:text-white capitalize font-semibold text-center text-xl">
               Watched
             </h1>
+            <div className="absolute inset-0 bg-brand/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
             <div className="mt-4 px-3 py-1 rounded-full bg-black/20 text-[10px] font-bold text-slate-500 uppercase tracking-widest border border-white/5 group-hover:border-brand/30 group-hover:text-brand/80 transition-all">
               {loading ? "..." : `${watchedMoviesCount} movies`}
             </div>

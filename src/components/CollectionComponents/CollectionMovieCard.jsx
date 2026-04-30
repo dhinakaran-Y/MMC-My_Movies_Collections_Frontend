@@ -213,6 +213,7 @@ export default function CollectionMovieCard({ movie, collectionId }) {
                         onClick={() => handleToggleCollection(col)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-xs ${isAdded ? "text-yellow-500 font-semibold" : "text-white"}`}>
                         {col.collectionName}
+                        {isAdded && <span className="float-right">✓</span>}
                       </button>
                     );
                   })}
