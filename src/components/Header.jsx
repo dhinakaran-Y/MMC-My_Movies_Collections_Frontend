@@ -30,39 +30,41 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Desktop Navigation (Hidden on Mobile) */}
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-10 items-center font-semibold">
-          {user && (
-            <div className="flex space-x-6 items-center">
-              <Link
-                href={"/"}
-                className={path === "/" ? "text-brand" : "text-white"}>
-                Home
-              </Link>
-              <Link
-                href={"/collections"}
-                className={
-                  path === "/collections" ? "text-brand" : "text-white"
-                }>
-                Collection
-              </Link>
-              {user.role === "admin" && (
+          <div className="flex space-x-6 items-center">
+            <Link
+              href={"/"}
+              className={path === "/" ? "text-brand" : "text-white"}>
+              Home
+            </Link>
+            {user && (
+              <>
+                <Link
+                  href={"/collections"}
+                  className={
+                    path === "/collections" ? "text-brand" : "text-white"
+                  }>
+                  Collection
+                </Link>
+                {user.role === "admin" && (
                 <Link
                   href={"/admin"}
                   className={path === "/admin" ? "text-brand" : "text-white"}>
                   Dashboard
                 </Link>
-              )}
-            </div>
-          )}
-          <Link
-            href={"/why"}
-            className={path === "/why" ? "text-brand" : "text-white"}>
-            Why ?
-          </Link>
+                )}
+              </>
+            )}
+            <Link
+              href={"/why"}
+              className={path === "/why" ? "text-brand" : "text-white"}>
+              Why ?
+            </Link>
+          </div>
         </nav>
 
-        {/* Right side (Profile + Hamburger for Mobile) */}
+        {/* Right side - mobile*/}
         <div className="flex items-center gap-4">
           <Link href={"/profile"}>
             <div className="w-9 h-9 rounded-full bg-brand shadow flex justify-center items-center font-bold text-white">
@@ -70,7 +72,7 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Hamburger Button (Visible only on mobile) */}
+          {/* Hamburger Button*/}
           <button onClick={toggleMenu} className="md:hidden p-2 text-white">
             <svg
               className="w-6 h-6"
