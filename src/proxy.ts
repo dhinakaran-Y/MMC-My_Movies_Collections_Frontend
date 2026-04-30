@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-console.log("🔴🔴🔴 MIDDLEWARE FILE LOADED 🔴🔴🔴");
+// console.log("🔴🔴🔴 MIDDLEWARE FILE LOADED 🔴🔴🔴");
 
 async function verifyToken(token) {
   try {
@@ -24,11 +24,12 @@ async function verifyToken(token) {
       return null;
     }
 
-    console.log("✅ Middleware: Token verified successfully. Payload:", {
-      id: verified.payload.id,
-      email: verified.payload.email,
-      role: verified.payload.role,
-    });
+    // console.log("✅ Middleware: Token verified successfully. Payload:",
+    //    {
+    //   id: verified.payload.id,
+    //   email: verified.payload.email,
+    //   role: verified.payload.role,
+    // });
 
     return verified.payload;
   } catch (err) {
@@ -78,7 +79,7 @@ export async function proxy(request) {
       );
       return NextResponse.redirect(new URL("/login", request.url));
     }
-    console.log("✅ Middleware: /collections - access granted");
+    // console.log("✅ Middleware: /collections - access granted");
     return NextResponse.next();
   }
 
@@ -92,7 +93,7 @@ export async function proxy(request) {
     // If fetch failed, let the page handle it
     if (!collection) return NextResponse.next();
 
-    // ✅ Public — anyone can view
+    // Public — anyone can view
     if (collection.visibility === "public") {
       return NextResponse.next();
     }
@@ -152,7 +153,7 @@ export async function proxy(request) {
       );
       return NextResponse.redirect(new URL("/not-authorized", request.url));
     }
-    console.log("✅ Middleware: /admin - access granted for admin");
+    // console.log("✅ Middleware: /admin - access granted for admin");
     return NextResponse.next();
   }
 
@@ -169,7 +170,7 @@ export async function proxy(request) {
       );
       return NextResponse.redirect(new URL("/login", request.url));
     }
-    console.log("✅ Middleware: /profile - access granted");
+    // console.log("✅ Middleware: /profile - access granted");
     return NextResponse.next();
   }
 
