@@ -61,6 +61,8 @@ async function fetchUserData(userId) {
 export default function MovieCard({ movie }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   const { user } = useAuth();
   const { openModal } = useCollectionModal();
 
@@ -71,8 +73,10 @@ export default function MovieCard({ movie }) {
     userIdRef.current = user?._id;
   }, [user?._id]);
 
+  // Reset the error state when the movie changes
   useEffect(() => {
     movieIdRef.current = movie.id;
+    setImageError(false);
   }, [movie.id]);
 
   useEffect(() => {
@@ -154,27 +158,29 @@ export default function MovieCard({ movie }) {
 
   const isWatched = state.watchedList.includes(movie.id.toString());
 
+  // Derive posterSrc directly at each render
+  const posterSrc = imageError
+    ? "/fallbackImg.png"
+    : movie.poster_path
+      ? `https://media.themoviedb.org/t/p/w600_and_h900_face/${movie.poster_path}`
+      : "/fallbackImg.png";
+
   return (
     <div className="group relative flex flex-col bg-dark-body2 rounded-xl overflow-hidden border border-white/5 shadow-lg">
       {/* Image Container */}
       <div className="relative w-full aspect-2/3 max-sm:h-100">
         <Image
-          src={`https://media.themoviedb.org/t/p/w600_and_h900_face/${movie.poster_path}`}
+          src={posterSrc}
           alt={movie.title}
           className="object-cover max-sm:object-center w-full h-full"
           width={500}
           height={750}
           loading="lazy"
+          onError={() => setImageError(true)}
         />
       </div>
 
-      {/* Info & Actions Div 
-          - Mobile/Tablet: Default flow (sits below image)
-          - lg: Absolute overlay (floats over image on hover)
-      */}
-      <div
-        className="p-4 flex flex-col items-center justify-center bg-dark-body2 
-                      lg:absolute lg:inset-0 lg:bg-black/90 lg:opacity-0 lg:group-hover:opacity-100 lg:z-10 transition-opacity duration-300">
+      <div className="p-4 flex flex-col items-center justify-center bg-dark-body2 lg:absolute lg:inset-0 lg:bg-black/90 lg:opacity-0 lg:group-hover:opacity-100 lg:z-10 transition-opacity duration-300">
         <h1 className="text-orange-500 font-bold text-center text-lg lg:text-2xl font-mono mb-2">
           {movie.title}
         </h1>
@@ -209,7 +215,9 @@ export default function MovieCard({ movie }) {
           <div className="w-full grid grid-cols-2 gap-2 mt-auto">
             <button
               onClick={handleToggleWatched}
-              className={`${isWatched ? "bg-green-600/80" : "bg-red-600/80"} rounded py-2 text-xs font-semibold text-white`}>
+              className={`${
+                isWatched ? "bg-green-600/80" : "bg-red-600/80"
+              } rounded py-2 text-xs font-semibold text-white`}>
               {isWatched ? "Watched ✓" : "Watch"}
             </button>
 
@@ -238,7 +246,11 @@ export default function MovieCard({ movie }) {
                       <button
                         key={col._id}
                         onClick={() => handleToggleCollection(col)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs ${isAdded ? "text-yellow-500 font-semibold" : "text-white"}`}>
+                        className={`w-full text-left px-3 py-2 rounded-lg text-xs ${
+                          isAdded
+                            ? "text-yellow-500 font-semibold"
+                            : "text-white"
+                        }`}>
                         {col.collectionName}
                       </button>
                     );

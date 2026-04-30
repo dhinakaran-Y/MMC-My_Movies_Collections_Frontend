@@ -55,6 +55,9 @@ async function fetchMovieData(userId, movieId) {
 export default function WatchListMovieCard({ movie }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [poster, setPoster] = useState(
+    `https://media.themoviedb.org/t/p/w600_and_h900_face/${movie.poster_path}`,
+  );
   const router = useRouter();
 
   const { user } = useAuth();
@@ -147,12 +150,13 @@ export default function WatchListMovieCard({ movie }) {
       {/* Image Container */}
       <div className="relative w-full aspect-[2/3]">
         <Image
-          src={`https://media.themoviedb.org/t/p/w600_and_h900_face/${movie.poster_path}`}
+          src={poster}
           alt={movie.title}
           className="object-cover w-full h-full"
           width={500}
           height={750}
           loading="lazy"
+          onError={() => setPoster("/fallbackImg.png")}
         />
       </div>
 
